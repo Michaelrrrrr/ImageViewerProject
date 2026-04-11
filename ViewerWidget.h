@@ -1,5 +1,7 @@
 #pragma once
 #include <QtWidgets>
+#include <QVector3D>
+
 class ViewerWidget :public QWidget {
 	Q_OBJECT
 private:
@@ -124,6 +126,7 @@ public:
 	void drawHermite(QColor color, double angle, double length);
 	void drawBezier(QColor color);
 	void drawBSpline(QColor color);
+
 
 public slots:
 	void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
