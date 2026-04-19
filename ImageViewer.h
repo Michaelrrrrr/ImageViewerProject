@@ -4,6 +4,7 @@
 #include <QtWidgets>
 #include "ui_ImageViewer.h"
 #include "ViewerWidget.h"
+#include "ThreeDobj.h"
 
 class ImageViewer : public QMainWindow
 {
@@ -47,6 +48,8 @@ private:
 	QColor v2Color = Qt::green;
 	QColor v3Color = Qt::blue;
 
+	ThreeDobj model;
+
 private slots:
 	void on_actionOpen_triggered();
 	void on_actionSave_as_triggered();
@@ -66,5 +69,12 @@ private slots:
 
 	void on_pushButtonClearPoints_clicked();
 	void on_drawCurve_triggered();
+
+	//3d
+
+	void on_createCube_btn_clicked();
+	void on_createSphere_btn_clicked();
+	void on_actionSave_VTK_triggered();
+	void on_actionLoad_VTK_triggered();
 
 };

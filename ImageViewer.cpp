@@ -29,6 +29,11 @@ ImageViewer::ImageViewer(QWidget* parent)
 	connect(ui->spinBoxLength, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageViewer::on_drawCurve_triggered);
 	connect(ui->comboBoxCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageViewer::on_drawCurve_triggered);
 	connect(ui->checkBoxCurve, &QCheckBox::stateChanged, this, &ImageViewer::on_drawCurve_triggered);
+
+	connect(ui->createCube_btn, &QPushButton::clicked, this, &ImageViewer::on_createCube_btn_clicked);
+	connect(ui->createSphere_btn, &QPushButton::clicked, this, &ImageViewer::on_createSphere_btn_clicked);
+	connect(ui->actionSave_Vtk, &QAction::triggered, this, &ImageViewer::on_actionSave_VTK_triggered);
+	connect(ui->actionLoad_Vtk, &QAction::triggered, this, &ImageViewer::on_actionLoad_VTK_triggered);
 }
 
 // Event filters
@@ -385,6 +390,47 @@ void ImageViewer::on_drawCurve_triggered() {
 	}
 	vW->update();
 }
+
+
+///////////////// 3D
+
+void ImageViewer::on_actionSave_VTK_triggered() {
+	QString fileName = QFileDialog::getSaveFileName(this, "Save VTK", "", "VTK Files (*.vtk)");
+
+	if (!fileName.isEmpty()) {
+		model.saveVtk(fileName);
+	}
+}
+
+void ImageViewer::on_actionLoad_VTK_triggered() {
+	QString fileName = QFileDialog::getOpenFileName(this, "Load VTK", "", "VTK Files (*.vtk)");
+
+	if (!fileName.isEmpty()) {
+		model.loadVtk(fileName);
+		vW->update();
+	}
+}
+
+void ImageViewer::on_createCube_btn_clicked() {
+	qDebug() << "Button clicked!";
+	double size = ui->side_sb->value();
+
+	model.createCube(size);
+
+	vW->update();
+}
+
+void ImageViewer::on_createSphere_btn_clicked() {
+	qDebug() << "Button clicked!";	
+	double r = ui->radius_sb->value();
+	int p = ui->paral_sb->value();
+	int m = ui->merid_sb->value();
+
+	model.createUVSphere(p, m, r);
+
+	vW->update();
+}
+
 void ImageViewer::on_pushButtonClearPoints_clicked() {
 	vW->clearPolygon();
 	vW->clearCanvas();
