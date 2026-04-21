@@ -127,6 +127,11 @@ public:
 	void drawBezier(QColor color);
 	void drawBSpline(QColor color);
 
+	double zenith = 0;
+	double azimuth = 0;
+	int projectionType = 0; // 0 paralel, 1 central
+	double distance = 500;
+	void drawModel(ThreeDobj& model);
 
 public slots:
 	void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;

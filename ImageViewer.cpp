@@ -34,6 +34,23 @@ ImageViewer::ImageViewer(QWidget* parent)
 	connect(ui->createSphere_btn, &QPushButton::clicked, this, &ImageViewer::on_createSphere_btn_clicked);
 	connect(ui->actionSave_Vtk, &QAction::triggered, this, &ImageViewer::on_actionSave_VTK_triggered);
 	connect(ui->actionLoad_Vtk, &QAction::triggered, this, &ImageViewer::on_actionLoad_VTK_triggered);
+
+	connect(ui->zenith_slider, QOverload<int>::of(&QSlider::valueChanged), this, [=](int val) {
+		vW->zenith = val;
+		vW->update();
+		});
+	connect(ui->azimuth_slider, QOverload<int>::of(&QSlider::valueChanged), this, [=](int val) {
+		vW->azimuth = val;
+		vW->update();
+	});
+	connect(ui->projection_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
+		vW->projectionType = index;
+		vW->update();
+	});
+	connect(ui->distance_spinbox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, [=](double val) {
+		vW->distance = val;
+		vW->update();
+	});
 }
 
 // Event filters
@@ -412,7 +429,6 @@ void ImageViewer::on_actionLoad_VTK_triggered() {
 }
 
 void ImageViewer::on_createCube_btn_clicked() {
-	qDebug() << "Button clicked!";
 	double size = ui->side_sb->value();
 
 	model.createCube(size);
@@ -420,8 +436,7 @@ void ImageViewer::on_createCube_btn_clicked() {
 	vW->update();
 }
 
-void ImageViewer::on_createSphere_btn_clicked() {
-	qDebug() << "Button clicked!";	
+void ImageViewer::on_createSphere_btn_clicked() {	
 	double r = ui->radius_sb->value();
 	int p = ui->paral_sb->value();
 	int m = ui->merid_sb->value();

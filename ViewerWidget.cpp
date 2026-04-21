@@ -711,6 +711,37 @@ void ViewerWidget::drawBSpline(QColor color) {
 	}
 }
 
+void ViewerWidget::drawModel(ThreeDobj& model)
+{
+	img->fill(Qt::white);
+	double theta = (zenith * M_PI) / 180.0;
+	double phi = (azimuth * M_PI) / 180.0;
+
+	auto projection = [&](Point3D p) {
+		//azimuth y
+		double x1 = v.x * cos(phi) + v.z * sin(phi);
+		double z1 = -v.x * sin(phi) + v.z * cos(phi);
+		//zenith x
+		double y2 = v.y * cos(theta) - z1 * sin(theta);
+		double z2 = v.y * sin(theta) + z1 * cos(theta);
+
+		double px, py;
+		if (projectionType == 0) { //Parallel
+			px = x1;
+			py = y2;
+		}
+		else { // Perspective
+			// d / (d - z)
+			double factor = distance / (distance - z2);
+			px = x1 * factor;
+			py = y2 * factor;
+		}
+
+		// Posun do stredu widgetu (aby kocka nebola v rohu 0,0)
+		return QPoint(px + width() / 2, height() / 2 - py);
+		};
+}
+
 //Slots
 void ViewerWidget::paintEvent(QPaintEvent * event)
 {
